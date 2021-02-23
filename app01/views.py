@@ -5,10 +5,13 @@ from rest_framework.response import Response
 # 引入rest_framework相关模块
 from rest_framework.views import APIView
 
+from .models import Type
 # 引入数据表
 from .models import Type1, Type2, Type3, Type4
 from .serializers import Type1ModelSerializer, Type2ModelSerializer
 from .serializers import Type3ModelSerializer, Type4ModelSerializer
+# 导入序列化类
+from .serializers import TypeModelSerializer
 
 
 # Create your views here.
@@ -58,3 +61,30 @@ class Type4View(APIView):
         Types = Type4.objects.all()
         Types_serializer = Type4ModelSerializer(Types, many=True)
         return Response(Types_serializer.data)
+
+
+class TypeView(APIView):
+    """
+    操作类别表
+    """
+    renderer_classes = [JSONRenderer]
+
+    def get(self, request, format=None):
+        types = Type.objects.all()
+        types_serializer = TypeModelSerializer(types, many=True)
+        return Response(types_serializer.data)
+
+    def post(self, request):
+        name = request.data.get('name')
+        category_type = request.data.get('lei')
+        parent_category_id = request.data.get('parent')
+        print(f"name:{name}, category:{category_type}, parent_categiry:{parent_category_id}")
+        type = Type()
+        type.name = name
+        type.category_Type = category_type
+        if parent_category_id:
+            parent_category = Type.objects.filter(id=parent_category_id).first()
+            type.parent_category = parent_category
+        type.save()
+        type_serializer = TypeModelSerializer(type)
+        return Response(type_serializer.data)

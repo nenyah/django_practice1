@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from app01.views import Type1View, Type2View, Type4View, Type3View
+from app01.views import Type1View, Type2View, Type4View, Type3View, TypeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/Type2/', Type2View.as_view()),
     path('api/Type3/', Type3View.as_view()),
     path('api/Type4/', Type4View.as_view()),
+    path('api/type/', TypeView.as_view()),
 ]
